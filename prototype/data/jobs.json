@@ -1,0 +1,23 @@
+[
+  {
+    "title": "Backend Engineer",
+    "company": "Acme Corp",
+    "required_skills": ["python", "sql", "aws"],
+    "required_years": 3,
+    "url": "https://careers.example.com/acme/backend-engineer"
+  },
+  {
+    "title": "Frontend Engineer",
+    "company": "Northwind",
+    "required_skills": ["javascript", "react", "git"],
+    "required_years": 2,
+    "url": "https://jobs.example.com/northwind/frontend-engineer"
+  },
+  {
+    "title": "Platform Engineer",
+    "company": "Globex",
+    "required_skills": ["docker", "kubernetes", "aws", "linux"],
+    "required_years": 5,
+    "url": "https://careers.example.com/globex/platform-engineer"
+  }
+]

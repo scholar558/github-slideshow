@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CV Matcher Prototype</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f5f7fb;
+        margin: 0;
+        padding: 2rem;
+      }
+      .card {
+        background: #fff;
+        border-radius: 12px;
+        padding: 2rem;
+        max-width: 720px;
+        margin: 0 auto;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+      }
+      h1 {
+        margin-top: 0;
+      }
+      label {
+        font-weight: 600;
+        display: block;
+        margin-top: 1rem;
+      }
+      input[type="file"],
+      input[type="email"] {
+        width: 100%;
+        margin-top: 0.5rem;
+        padding: 0.6rem 0.8rem;
+        border-radius: 8px;
+        border: 1px solid #cbd5f5;
+      }
+      button {
+        margin-top: 1.5rem;
+        background: #1d4ed8;
+        color: #fff;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 999px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .flash {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #991b1b;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+      }
+      .results {
+        margin-top: 2rem;
+        padding-top: 1rem;
+        border-top: 1px solid #e2e8f0;
+      }
+      .pill {
+        display: inline-block;
+        background: #e0f2fe;
+        color: #0369a1;
+        padding: 0.25rem 0.75rem;
+        border-radius: 999px;
+        margin: 0.25rem 0.25rem 0 0;
+        font-size: 0.85rem;
+      }
+      .job {
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #e2e8f0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>CV Matcher Prototype</h1>
+      <p>Upload a CV and see which sample roles you fully qualify for. Optional email delivery requires SMTP config.</p>
+
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {% for message in messages %}
+            <div class="flash">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <form method="post" enctype="multipart/form-data">
+        <label for="cv">CV file (PDF or TXT)</label>
+        <input id="cv" name="cv" type="file" required />
+
+        <label for="email">Email (optional)</label>
+        <input id="email" name="email" type="email" placeholder="you@example.com" />
+
+        <button type="submit">Check matches</button>
+      </form>
+
+      {% if cv_data %}
+        <div class="results">
+          <h2>Extracted CV Data</h2>
+          <p><strong>Years of experience:</strong> {{ cv_data.years_experience }}</p>
+          <div>
+            <strong>Detected skills:</strong>
+            {% if cv_data.skills %}
+              {% for skill in cv_data.skills %}
+                <span class="pill">{{ skill }}</span>
+              {% endfor %}
+            {% else %}
+              <span>None detected.</span>
+            {% endif %}
+          </div>
+
+          <h2>Fully Qualified Roles</h2>
+          {% if results %}
+            {% for job in results %}
+              <div class="job">
+                <strong>{{ job.title }}</strong> — {{ job.company }}<br />
+                <a href="{{ job.url }}" target="_blank" rel="noreferrer">View listing</a>
+              </div>
+            {% endfor %}
+          {% else %}
+            <p>No fully qualified roles were found based on the sample data.</p>
+          {% endif %}
+
+          {% if email_status %}
+            <p><strong>Email status:</strong> {{ email_status[1] }}</p>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  </body>
+</html>
